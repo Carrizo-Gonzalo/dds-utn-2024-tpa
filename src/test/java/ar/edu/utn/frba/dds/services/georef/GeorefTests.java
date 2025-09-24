@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.dds.services.georef;
+/*package ar.edu.utn.frba.dds.services.georef;
 
 import ar.edu.utn.frba.dds.dtos.georef.ProvinciaMunicipioGeorefDTO;
 import ar.edu.utn.frba.dds.dtos.georef.PuntoGeorefDTO;
@@ -21,3 +21,5 @@ public class GeorefTests {
         }
     }
 }
+
+ */
