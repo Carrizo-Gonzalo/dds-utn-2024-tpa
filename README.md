@@ -1,80 +1,183 @@
-# java-base-project
+# MAACVS – Sistema para la Mejora del Acceso Alimentario en Contextos de Vulnerabilidad Socioeconómica
 
-Esta es una plantilla de proyecto diseñada para: 
+Este proyecto fue desarrollado como parte del **Trabajo Práctico Anual de la materia Diseño de Sistemas (UTN, 2024)**.
 
-* Java 17. :warning: Si bien el proyecto no lo limita explícitamente, el comando `mvn verify` no funcionará con versiones más antiguas de Java. 
-* JUnit 5. :warning: La versión 5 de JUnit es la más nueva del framework y presenta algunas diferencias respecto a la versión "clásica" (JUnit 4). Para mayores detalles, ver: 
-  *  [Apunte de herramientas](https://docs.google.com/document/d/1VYBey56M0UU6C0689hAClAvF9ILE6E7nKIuOqrRJnWQ/edit#heading=h.dnwhvummp994)
-  *  [Entrada de Blog (en inglés)](https://www.baeldung.com/junit-5-migration) 
-  *  [Entrada de Blog (en español)](https://www.paradigmadigital.com/dev/nos-espera-junit-5/)
-* Maven 3.8.1 o superior
+El enunciado propone el diseño e implementación de una solución tecnológica que permita a organizaciones y comunidades coordinar y gestionar el acceso a recursos alimentarios en contextos de vulnerabilidad socioeconómica.
 
-## Ejecutar tests
+La aplicación implementa un sistema web de **cliente liviano** (server-side render), con **persistencia mediante JPA (Hibernate como implementación)** y un backend desarrollado en **Java** utilizando el framework **Javalin**.
+La base de datos utilizada es **MySQL**.
+
+---
+
+## 📌 Características principales
+
+* Arquitectura modular con separación clara de capas.
+* Framework web: **Javalin**, con renderizado del lado del servidor.
+* Persistencia de datos utilizando **JPA (Hibernate ORM)** sobre **MySQL**.
+* Carga masiva de entidades desde archivos CSV.
+* Gestión de usuarios e **incidentes alimentarios** con fotos adjuntas.
+* Manejo de sesiones y validaciones.
+* Generación de reportes y consultas para la toma de decisiones.
+
+---
+
+## 🏗 Arquitectura y estructura
 
 ```
+└── src/
+    ├── main/java/
+    │   ├── controllers/      ← Controladores (manejo de requests/responses)
+    │   ├── models/           ← Entidades del dominio (JPA)
+    │   ├── repositories/     ← Repositorios (EntityManager / JPA)
+    │   ├── services/         ← Lógica de negocio
+    │   └── App.java          ← Punto de entrada de la aplicación
+    ├── main/resources/
+    │   ├── templates/        ← Vistas HTML para server-side rendering
+    │   └── META-INF/
+    │       └── persistence.xml ← Configuración de JPA (MySQL)
+    └── test/                 ← Tests unitarios
+├── uploads/                  ← Carpeta para fotos de incidentes
+├── CargaMasivaTest1.csv      ← Ejemplos de carga masiva
+├── CargaMasivaTest2.csv
+├── CargaMasivaTest3.csv
+├── Diagramas.mdj             ← Diagramas UML / de diseño
+├── pom.xml                   ← Dependencias (Maven)
+└── README.md
+```
+
+---
+
+## 🛠 Tecnologías usadas
+
+* **Java 17**
+* **Javalin** – Framework web liviano
+* **JPA (con Hibernate como implementación)** – Persistencia
+* **MySQL** – Base de datos
+* **Maven** – Gestión de dependencias
+* **JUnit** – Testing
+* **Handlebars** - Motor de plantillas
+
+---
+
+## ⚙️ Instalación / Configuración
+
+1. **Clonar el repositorio**
+
+   ```bash
+   git clone https://github.com/Sichermatias/dds-utn-2024-tpa.git
+   cd dds-utn-2024-tpa
+   ```
+
+2. **Instalar dependencias**
+
+   ```bash
+   mvn clean install
+   ```
+
+3. **Configurar base de datos (MySQL)**
+   Editar el archivo `persistence.xml` (en `src/main/resources/META-INF/`) con las credenciales de tu servidor MySQL.
+
+   ```xml
+   <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+   <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dds_db?serverTimezone=UTC"/>
+   <property name="javax.persistence.jdbc.user" value="root"/>
+   <property name="javax.persistence.jdbc.password" value="tu_password"/>
+   <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+   ```
+
+   > Asegurate de crear la base de datos `dds_db` en MySQL antes de ejecutar la aplicación:
+
+   ```sql
+   CREATE DATABASE dds_db;
+   ```
+
+4. **Ejecutar la aplicación**
+
+   ```bash
+   mvn exec:java -Dexec.mainClass="App"
+   ```
+
+5. **Abrir en el navegador**
+   👉 [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 🚀 Uso
+
+* **Personas vulnerables**: acceden a las heladeras comunitarias mediante una tarjeta registrada en el sistema, lo que permite un control seguro y ordenado del acceso a los recursos alimentarios.
+* **Organizaciones y comunidades**: administran las heladeras, supervisan incidentes y gestionan la asistencia alimentaria.
+* **Carga masiva**: permite subir archivos CSV para registrar múltiples entidades de forma rápida.
+* **Reportes**: el sistema genera información útil sobre accesos, incidentes y recursos disponibles.
+
+---
+
+## 🧪 Tests
+
+Para correr los tests:
+
+```bash
 mvn test
 ```
 
-## Validar el proyecto de forma exahustiva
+---
 
-```
-mvn clean verify
-```
+## 🌱 Mejoras futuras
 
-Este comando hará lo siguiente:
+* Paginación y filtros avanzados en listados.
+* Documentación de API con Swagger / OpenAPI.
+* Tests de integración con cobertura ampliada.
+* Despliegue en la nube (Heroku, Railway, etc.).
 
- 1. Ejecutará los tests
- 2. Validará las convenciones de formato mediante checkstyle
- 3. Detectará la presencia de (ciertos) code smells
- 4. Validará la cobertura del proyecto
+---
 
-## Entrega del proyecto
+## 📝 Licencia
 
-Para entregar el proyecto, crear un tag llamado `entrega-final`. Es importante que antes de realizarlo se corra la validación
-explicada en el punto anterior. Se recomienda hacerlo de la siguiente forma:
+Este proyecto es de carácter académico.
 
-```
-mvn clean verify && git tag entrega-final && git push origin HEAD --tags
-```
+---
 
-## Configuración del IDE (IntelliJ)
+## 👨‍💻 Autores
 
-### Usar el SDK de Java 17
+* **Matías Sicher**
+* **Federico Bietti**
+* **Gonzalo Carrizo**
+* **Lautaro Petronacci**
 
-1. En **File/Project Structure...**, ir a **Project Settings | Project**
-2. En **Project SDK** seleccionar la versión 17 y en **Project language level** seleccionar `17 - Sealed types, always-strict floating-point semantics`
+📍 UTN – Diseño de Sistemas 2024
 
-![image](https://user-images.githubusercontent.com/39303639/228126065-221b9851-fb96-4f7f-a8e1-010732dc7ef6.png)
 
-### Usar fin de linea unix
-1. En **File/Settings...**, ir a **Editor | Code Style**.
-2. En la lista **Line separator**, seleccionar `Unix and OS X (\n)`.
 
-![image](https://user-images.githubusercontent.com/39303639/228126546-352289fa-8feb-4b39-99db-d8b860915fea.png)
 
-### Tabular con dos espacios
+asdsadasdddddddddddddddddddddddddddddd
 
-1. En **File/Settings...**, ir a **Editor | Code Style | Java | Tabs and Indents**.
-2. Cambiar **Tab size**, **Indent** y **Continuation indent** a 2, 2 y 4 respectivamente:
 
-![image](https://user-images.githubusercontent.com/39303639/228127009-8c84ea72-969b-4e05-b311-45e3688a4164.png)
+¡Excelente observación! 🔥
+Ese es justamente el **núcleo funcional del sistema** según el enunciado, y vale la pena destacarlo fuerte en el README porque es lo que más muestra el **impacto social y el caso de uso realista**.
 
-### Ordenar los imports
+Te propongo que en la sección de **Características principales** y **Uso** quede bien claro lo de las **personas vulnerables que acceden a las heladeras mediante una tarjeta**, además de la carga de incidentes y la gestión por parte de organizaciones.
 
-1. En **File/Settings...**, ir a **Editor | Code Style | Java | Imports**.
-2. Cambiar **Class count to use import with '*'** y **Names count to use static import with '*'** a un número muy alto (ej: 99).
-3. En **Import Layout**, dejarlo como se muestra a continuación:
-    - `import static all other imports`
-    - `<blank line>`
-    - `import all other imports`
+---
 
-![image](https://user-images.githubusercontent.com/39303639/228126787-36f9ecff-27f2-4b99-bf11-a6bd89f67087.png)
+Aquí va la versión ajustada:
 
-### Instalar y configurar Checkstyle
+---
 
-1. Instalar el plugin https://plugins.jetbrains.com/plugin/1065-checkstyle-idea:
-2. En **File/Settings...**, ir a **Tools | Checkstyle**.
-3. Configurarlo activando los Checks de Google y la versión de Checkstyle `== 9.0.1`:
+# MAACVS – Sistema para la Mejora del Acceso Alimentario en Contextos de Vulnerabilidad Socioeconómica
 
-![image](https://github.com/dds-utn/java-base-project/assets/11719816/b1edc122-4675-4f8d-bffc-9e3d3366fac6)
+Este proyecto fue desarrollado como parte del **Trabajo Práctico Anual de la materia Diseño de Sistemas (UTN, 2024)**.
 
+El enunciado propone el diseño e implementación de una solución tecnológica que permita a **organizaciones y comunidades** coordinar y gestionar el acceso a recursos alimentarios en **contextos de vulnerabilidad socioeconómica**.
+
+La aplicación implementa un sistema web de **cliente liviano** (server-side render), con **persistencia mediante JPA (Hibernate como implementación)** y un backend desarrollado en **Java** utilizando el framework **Javalin**.
+La base de datos utilizada es **MySQL**.
+
+---
+
+## 📌 Características principales
+
+* **Acceso alimentario controlado**: las personas en situación de vulnerabilidad se alimentan abriendo las **heladeras comunitarias** mediante una **tarjeta asignada**.
+* **Gestión de comunidades y organizaciones** que administran las heladeras y supervisan su correcto funcionamiento.
+* **Registro y gestión de incidentes** relacionados con las heladeras, incluyendo evidencia fotográfica.
+* **Carga masiva de datos** desde archivos CSV.
+* **Manejo de usuarios, sesiones y validaciones**.
+* **Generación de reportes** y consultas para apoyar la toma de decisiones.
